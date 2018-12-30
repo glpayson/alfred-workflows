@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>com.glpayson.alfred</string>
+	<key>category</key>
+	<string>Productivity</string>
+	<key>connections</key>
+	<dict>
+		<key>264A09D9-DE34-403A-9524-C67F6525811D</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>0D7E6DE7-D16E-4CC0-854E-A60E11183F15</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>glpayson</string>
+	<key>description</key>
+	<string>open a file in spacemacs</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>Open in Spacemacs</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>68</integer>
+				<key>script</key>
+				<string>on run argv
+my openITerm()set openedInCurrentEmacs to my openInCurrentEmacs()if not openedInCurrentEmacs then	my openInNewEmacs()end if	
+
+end run
+
+on openITerm()	tell application "iTerm"		if (count of windows) = 0 then			create window with default profile		end if	end tellend openITermon openInCurrentEmacs()	tell application "iTerm"		tell current window			# Try to find open emacsclient tab to open file in			set tabNum to 1			repeat with aTab in tabs				set tabName to name of current session of aTab				if (tabName contains "emacsclient (emacsclient)") then					activate					tell current tab of current window						tell application "System Events"							keystroke tabNum using command down							key code 53		# esc -- Make sure I'm in command mode							delay 1.0							keystroke ":edit {query}"							keystroke return							return true						end tell					end tell				end if				set tabNum to (tabNum + 1)			end repeat		end tell	end tell	return falseend openInCurrentEmacson openInNewEmacs()	tell application "iTerm"		tell current window			set newTab to (create tab with default profile)			set theSession to current session of newTab			tell theSession				activate				delay 1.0				tell application "System Events"					keystroke "emacsclient {query}"					keystroke return				end tell			end tell		end tell	end tellend openInNewEmacs</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>6</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>0D7E6DE7-D16E-4CC0-854E-A60E11183F15</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>emacs</string>
+				<key>subtext</key>
+				<string></string>
+				<key>text</key>
+				<string>Open in spacemacs</string>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>264A09D9-DE34-403A-9524-C67F6525811D</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string></string>
+	<key>uidata</key>
+	<dict>
+		<key>0D7E6DE7-D16E-4CC0-854E-A60E11183F15</key>
+		<dict>
+			<key>xpos</key>
+			<integer>300</integer>
+			<key>ypos</key>
+			<integer>50</integer>
+		</dict>
+		<key>264A09D9-DE34-403A-9524-C67F6525811D</key>
+		<dict>
+			<key>xpos</key>
+			<integer>50</integer>
+			<key>ypos</key>
+			<integer>50</integer>
+		</dict>
+	</dict>
+	<key>webaddress</key>
+	<string></string>
+</dict>
+</plist>
