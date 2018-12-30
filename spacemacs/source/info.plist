@@ -41,11 +41,66 @@
 				<integer>68</integer>
 				<key>script</key>
 				<string>on run argv
-my openITerm()set openedInCurrentEmacs to my openInCurrentEmacs()if not openedInCurrentEmacs then	my openInNewEmacs()end if	
+
+my openITerm()
+set openedInCurrentEmacs to my openInCurrentEmacs()
+if not openedInCurrentEmacs then
+	my openInNewEmacs()
+end if	
 
 end run
 
-on openITerm()	tell application "iTerm"		if (count of windows) = 0 then			create window with default profile		end if	end tellend openITermon openInCurrentEmacs()	tell application "iTerm"		tell current window			# Try to find open emacsclient tab to open file in			set tabNum to 1			repeat with aTab in tabs				set tabName to name of current session of aTab				if (tabName contains "emacsclient (emacsclient)") then					activate					tell current tab of current window						tell application "System Events"							keystroke tabNum using command down							key code 53		# esc -- Make sure I'm in command mode							delay 1.0							keystroke ":edit {query}"							keystroke return							return true						end tell					end tell				end if				set tabNum to (tabNum + 1)			end repeat		end tell	end tell	return falseend openInCurrentEmacson openInNewEmacs()	tell application "iTerm"		tell current window			set newTab to (create tab with default profile)			set theSession to current session of newTab			tell theSession				activate				delay 1.0				tell application "System Events"					keystroke "emacsclient {query}"					keystroke return				end tell			end tell		end tell	end tellend openInNewEmacs</string>
+on openITerm()
+	tell application "iTerm"
+		if (count of windows) = 0 then
+			create window with default profile
+		end if
+	end tell
+end openITerm
+
+on openInCurrentEmacs()
+	tell application "iTerm"
+		tell current window
+			# Try to find open emacsclient tab to open file in
+			set tabNum to 1
+			repeat with aTab in tabs
+				set tabName to name of current session of aTab
+				if (tabName contains "emacsclient (emacsclient)") then
+					activate
+					tell current tab of current window
+						tell application "System Events"
+							keystroke tabNum using command down
+							key code 53		# esc -- Make sure I'm in command mode
+							delay 1.0
+							keystroke ":edit {query}"
+							keystroke return
+							return true
+						end tell
+					end tell
+				end if
+				set tabNum to (tabNum + 1)
+			end repeat
+		end tell
+	end tell
+	return false
+end openInCurrentEmacs
+
+on openInNewEmacs()
+	tell application "iTerm"
+		tell current window
+			set newTab to (create tab with default profile)
+			set theSession to current session of newTab
+			tell theSession
+				activate
+				delay 1.0
+				tell application "System Events"
+					keystroke "emacsclient {query}"
+					keystroke return
+				end tell
+			end tell
+		end tell
+	end tell
+end openInNewEmacs</string>
 				<key>scriptargtype</key>
 				<integer>0</integer>
 				<key>scriptfile</key>
